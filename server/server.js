@@ -15,7 +15,6 @@ app.use(express.static(__dirname + "/../client"));
 app.post('/api/base64', function (req, res){
     console.log(req.body)
     var base64 = req.body;
-    
 })
 
 app.listen(8000)
