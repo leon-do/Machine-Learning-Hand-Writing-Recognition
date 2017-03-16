@@ -9,9 +9,7 @@ app.use(bodyParser.text());
 app.use(bodyParser.urlencoded ({ extended:true }));
 app.use(bodyParser.json({ type: "application/vnd.api+json" }));
 
-app.get('/', function (req, res) {
-    res.sendFile(path.resolve(__dirname + "/../client/index.html"))
-})
+app.use(express.static(__dirname + "/../client"));
 
 
 app.post('/base64', function (req, res){
