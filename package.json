@@ -1,0 +1,26 @@
+{
+  "name": "machine-learning-hand-writing-recognition",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leon-do/Machine-Learning-Hand-Writing-Recognition.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leon-do/Machine-Learning-Hand-Writing-Recognition/issues"
+  },
+  "homepage": "https://github.com/leon-do/Machine-Learning-Hand-Writing-Recognition#readme",
+  "dependencies": {
+    "base64-img": "^1.0.3",
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "get-pixels": "^3.3.0",
+    "jimp": "^0.2.27"
+  }
+}

@@ -58,7 +58,7 @@ function draw() {
     ctx.moveTo(prevX, prevY);
     ctx.lineTo(currX, currY);
     ctx.strokeStyle = 'black';
-    ctx.lineWidth = 50;
+    ctx.lineWidth = 20;
     ctx.stroke();
     ctx.closePath();
 }
