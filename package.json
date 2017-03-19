@@ -1,4 +1,4 @@
-n{
+{
   "name": "machine-learning-hand-writing-recognition",
   "version": "1.0.0",
   "description": "",
@@ -21,6 +21,7 @@ n{
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "get-pixels": "^3.3.0",
-    "jimp": "^0.2.27"
+    "jimp": "^0.2.27",
+    "mongoose": "^4.9.0"
   }
 }

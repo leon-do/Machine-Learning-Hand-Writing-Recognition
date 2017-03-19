@@ -1,4 +1,6 @@
 // https://www.npmjs.com/package/mnist
+// this adds data to mongodb
+
 
 var mnist = require('mnist');
 var mongoose = require('mongoose');
