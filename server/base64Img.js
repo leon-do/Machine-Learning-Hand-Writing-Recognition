@@ -2,12 +2,8 @@
 var base64Img = require('base64-img');
 var Jimp = require("jimp");
 var getPixels = require('get-pixels');
-var mongoose = require('mongoose');
+var MongoClient = require('mongodb').MongoClient
 var fs = require('fs')
-var myData = require('./data/myData.js')
-
-mongoose.connect('mongodb://localhost/testdb');
-var myModel = mongoose.model("machinelearning", {input:Array, output:String})
 
 
 
@@ -55,6 +51,9 @@ function flattenImg(){
 }
 
 
+
+
+
 function cropArray(arr){
     console.log("\n\n\n CROP ARRAY")
     console.log(arr)
@@ -72,23 +71,45 @@ function cropArray(arr){
     var flatArray = [arr[0]].concat(tailArr).concat(midArr) // [ 1, 5, 6, 7, 8, 9, 10, 2, 3, 4 ]
     
     //flat array is the text array after being cropped
-    controlArray(flatArray)
+    queryMongo(flatArray)
 }
 
 
-function controlArray(flatArray){
 
-    //import data from data/myData.js and save as controlArr
-    var controlArr = myData.array;
+
+
+function queryMongo(testArr){
+    MongoClient.connect('mongodb://localhost:27017/testdb', function(err, db) {
+        // Find some documents 
+        db.collection('machinelearnings').find({}).toArray(function(err, docs) {
+            getAnswer(testArr,docs)
+        })
+    });
+}
+
+
+
+
+
+
+
+function getAnswer(testArr, controlArr){
+
+    //controlArr is the from the db
+    //testArr is what the user inputs in
 
     //create an arr to store distance
     var distanceArr = [];
 
-    for (var i = 0; i < myData.array.length; i++){
-        var distance = euclideanDistance(controlArr[i].slice(1,controlArr[i].length), flatArray)
-        distanceArr.push(distance)
 
+    for (var i in controlArr){
+        var distance = euclideanDistance(controlArr[i].arr, testArr)
+        distanceArr.push(distance)
     }
+
+
+
+
 
     //list if distances
     console.log('\n\n DISTANCE ARRAY')
@@ -98,17 +119,17 @@ function controlArray(flatArray){
     var shortestDistanceIndex = distanceArr.indexOf(Math.min.apply(Math,distanceArr))
 
 
-    //displays flatArray on console
+    //displays flatArray (user array) on console
     console.log('\n\n TEST VISUAL')
-    visual(flatArray)
+    visual(testArr)
 
 
     //display Control Image
     console.log('\n\n CONTROL VISUAL')
-    visual(myData.array[shortestDistanceIndex])
+    visual(controlArr[shortestDistanceIndex].arr)
 
     //answer
-    console.log(`Answer: ${myData.array[shortestDistanceIndex][0]}`)
+    console.log(`Answer: ${controlArr[shortestDistanceIndex].answer}`)
 }
 
 
