@@ -77,32 +77,41 @@ function cropArray(arr){
 
 
 function controlArray(flatArray){
-    console.log('\n\n\n FLAT ARRAY')
-    console.log(flatArray)
 
-    //data is from ./data/myData.js
-    var data = myData.array
+    //import data from data/myData.js and save as controlArr
+    var controlArr = myData.array;
 
+    //create an arr to store distance
+    var distanceArr = [];
 
-    // push distances into euclideaArray
-    var euclideanArray =  [];    
-    for (var i = 0; i < data.length; i++){
-        //console.log(euclideanDistance(data[i].splice(1),flatArray))
-        euclideanArray.push(euclideanDistance(data[i].splice(1),flatArray))
+    for (var i = 0; i < myData.array.length; i++){
+        var distance = euclideanDistance(controlArr[i].slice(1,controlArr[i].length), flatArray)
+        distanceArr.push(distance)
+
     }
 
-    
-    console.log('\n\n EUCLIDEAN ARRAY')
-    console.log(euclideanArray)
+    //list if distances
+    console.log('\n\n DISTANCE ARRAY')
+    console.log(distanceArr)
 
-    //gets the index with the smallest number (distance)
-    var index = euclideanArray.indexOf(Math.min.apply(Math,euclideanArray))
+    //find the index of the smallest distance
+    var shortestDistanceIndex = distanceArr.indexOf(Math.min.apply(Math,distanceArr))
 
-    //displays answer with shortest distance
-    var answer = data[index];
-   console.log(`Answer: ${answer}`)
 
+    //displays flatArray on console
+    console.log('\n\n TEST VISUAL')
+    visual(flatArray)
+
+
+    //display Control Image
+    console.log('\n\n CONTROL VISUAL')
+    visual(myData.array[shortestDistanceIndex])
+
+    //answer
+    console.log(`Answer: ${myData.array[shortestDistanceIndex][0]}`)
 }
+
+
 
 
 
@@ -118,6 +127,16 @@ function euclideanDistance(arr1, arr2){
     }),0.5)
 
     return answer;
+}
+
+
+
+
+function visual(arr){
+    // see image on console as 1 and 0's
+    for (var i = 0; i < arr.length; i=i+28){
+        console.log(`${arr[i+0]} ${arr[i+1]} ${arr[i+2]} ${arr[i+3]} ${arr[i+4]} ${arr[i+5]} ${arr[i+6]} ${arr[i+7]} ${arr[i+8]} ${arr[i+9]} ${arr[i+10]} ${arr[i+11]} ${arr[i+12]} ${arr[i+13]} ${arr[i+14]} ${arr[i+15]} ${arr[i+16]} ${arr[i+17]} ${arr[i+18]} ${arr[i+19]} ${arr[i+20]} ${arr[i+21]} ${arr[i+22]} ${arr[i+23]} ${arr[i+24]} ${arr[i+25]} ${arr[i+26]} ${arr[i+27]}`)
+    }
 }
 
 
