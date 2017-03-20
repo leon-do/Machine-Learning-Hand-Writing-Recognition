@@ -12,15 +12,9 @@ function myCtrl($http){
             $window.location.reload();
         })
     }
+
+
+    this.clrCanvas = function(){
+        ctx.clearRect(0, 0, 420, 420);
+    }
 }
-
-
-// $("#clr").on('click',function(){
-//     ctx.clearRect(0, 0, 420, 420);
-// })
-
-
-
-// $('#analyze').on('click', function(){
-//     $.post('/api/base64', {base64: canvas.toDataURL()})
-// })

@@ -12,9 +12,11 @@ var myModel = mongoose.model("machinelearning", {input:Array, output:String})
 
 
 exports.base64toImg = function(base64Data){
+    console.log('\n\n\n BASE64 TO IMG')
+    console.log(base64Data)
     //creates image from base64. saves it in img/screenshot.png
-    base64Img.img(base64Data.base64, 'img', 'screenshotFull', function(err, filepath) {
-        console.log(filepath)
+    base64Img.img(base64Data.base64, './server/img', 'screenshotFull', function(err, filepath) {
+       // console.log(filepath)
         resizeImage()
     });
 }
@@ -22,11 +24,11 @@ exports.base64toImg = function(base64Data){
 
 function resizeImage(){
     // open a file called "screenshot.png"
-    Jimp.read("img/screenshotFull.png", function (err, image) {
+    Jimp.read(__dirname + "/img/screenshotFull.png", function (err, image) {
         if (err) throw err;
-        image.resize(28, 28)                        // resize image
-             .greyscale()                           // set greyscale
-             .write("./img/screenshotMin.png");     // save
+        image.resize(28, 28)                                         // resize image
+             .greyscale()                                            // set greyscale
+             .write(__dirname + "/img/screenshotMin.png");     // save
         flattenImg()             
     })
 }
@@ -34,18 +36,28 @@ function resizeImage(){
 
 
 function flattenImg(){
-    getPixels('./img/screenshotMin.png', function(err, pixels){
-        var flatArray = [];
+    getPixels(__dirname + '/img/screenshotMin.png', function(err, pixels){
+
+        var binaryArray = [];
+        //convert to 1 and 0
         for (var i = 3; i < pixels.data.length; i=i+4){
-                flatArray.push(Math.ceil(pixels.data[i] / 255))
+            if (pixels.data[i] === 0){
+                binaryArray.push(0)
+            } else {
+                binaryArray.push(1)
+            }
         }
-        //console.log(flatArray)
-        cropArray(flatArray)
+
+        console.log("\n\n\n FLATTEN IMG")
+        console.log(binaryArray)
+        cropArray(binaryArray)
     }) 
 }
 
 
 function cropArray(arr){
+    console.log("\n\n\n CROP ARRAY")
+    console.log(arr)
     //put the 0's at the tail end
     for (var i = 1; i < arr.length; i++){
         if (arr[i] === 1){
@@ -65,36 +77,36 @@ function cropArray(arr){
 
 
 function controlArray(flatArray){
+    console.log('\n\n\n FLAT ARRAY')
+    console.log(flatArray)
 
-    //from ./data/myData.js
+    //data is from ./data/myData.js
     var data = myData.array
-    var shortestDistance = Infinity;
-    var index;
+
+
+    // push distances into euclideaArray
+    var euclideanArray =  [];    
     for (var i = 0; i < data.length; i++){
-        if (shortestDistance > euclideanDistance(data[i].splice(1),flatArray)){
-            shortestDistance = euclideanDistance(data[i].splice(1),flatArray)
-            index = i;
-        }
+        console.log(euclideanDistance(data[i].splice(1),flatArray))
+        euclideanArray.push(euclideanDistance(data[i].splice(1),flatArray))
     }
 
+    console.log('\n\n EUCLIDEAN ARRAY')
+    console.log(euclideanArray)
 
-    var answer = data[index][0];
-    console.log(answer)
+    //gets the index with the smallest number (distance)
+    var index = euclideanArray.indexOf(Math.min.apply(Math,euclideanArray))
 
+    //displays answer with shortest distance
+    var answer = data[index];
+   // console.log(`Answer: ${answer}`)
 
-    /*
-    myModel.find({}, function (err, data) {
-        var shortestDistance = Infinity;
-        var index;
-
-        console.log(data[0]['_id'])
-
-
-        var answer = data[index][0];
-        console.log(answer)
-    })
-    */
 }
+
+
+
+
+
 
 
 function euclideanDistance(arr1, arr2){

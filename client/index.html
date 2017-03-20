@@ -8,7 +8,12 @@
 <body ng-app='myApp' ng-controller='myCtrl as myCtrl' >
 
         <canvas id="can" width="420" height="420" style="position:absolute;top:10%;left:10%;border:2px solid;"></canvas>
-        <input type="button" value="clear" id="clr"">
+        <input 
+            type="button" 
+            value="clear" 
+            id="clr"
+            ng-click='myCtrl.clrCanvas()'>
+
         <input 
             type="button" 
             value="analyze" 
