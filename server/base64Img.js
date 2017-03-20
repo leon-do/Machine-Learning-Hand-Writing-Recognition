@@ -87,10 +87,11 @@ function controlArray(flatArray){
     // push distances into euclideaArray
     var euclideanArray =  [];    
     for (var i = 0; i < data.length; i++){
-        console.log(euclideanDistance(data[i].splice(1),flatArray))
+        //console.log(euclideanDistance(data[i].splice(1),flatArray))
         euclideanArray.push(euclideanDistance(data[i].splice(1),flatArray))
     }
 
+    
     console.log('\n\n EUCLIDEAN ARRAY')
     console.log(euclideanArray)
 
@@ -99,7 +100,7 @@ function controlArray(flatArray){
 
     //displays answer with shortest distance
     var answer = data[index];
-   // console.log(`Answer: ${answer}`)
+   console.log(`Answer: ${answer}`)
 
 }
 
