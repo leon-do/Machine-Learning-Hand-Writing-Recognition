@@ -1,8 +1,8 @@
 # Machine-Learning-Hand-Writing-Recognition
 
-http://localhost:8000/flattenImg
-
 http://localhost:8000/base64toImg
+
+http://localhost:8000/flattenImg
 
 http://localhost:8000/cropArray
 
