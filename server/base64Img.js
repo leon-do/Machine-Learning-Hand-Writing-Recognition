@@ -11,10 +11,8 @@ exports.base64toImg = function(base64Data){
     console.log('\n\n\n BASE64 TO IMG')
     console.log(base64Data)
     //creates image from base64. saves it in img/screenshot.png
-    base64Img.img(base64Data.base64, './server/img', 'screenshotFull', function(err, filepath) {
-       // console.log(filepath)
-        resizeImage()
-    });
+    base64Img.imgSync(base64Data.base64, './server/img', 'screenshotFull')
+    resizeImage()
 }
 
 
@@ -23,9 +21,10 @@ function resizeImage(){
     Jimp.read(__dirname + "/img/screenshotFull.png", function (err, image) {
         if (err) throw err;
         image.resize(28, 28)                                         // resize image
-             .greyscale()                                            // set greyscale
-             .write(__dirname + "/img/screenshotMin.png");     // save
-        flattenImg()             
+            .greyscale()                                            // set greyscale
+            .write(__dirname + "/img/screenshotMin.png", function(){ //save
+                flattenImg()  
+            });
     })
 }
 
@@ -46,6 +45,7 @@ function flattenImg(){
 
         console.log("\n\n\n FLATTEN IMG")
         console.log(binaryArray)
+fs.writeFile('flatten.txt', binaryArray, 'utf8')
         cropArray(binaryArray)
     }) 
 }
