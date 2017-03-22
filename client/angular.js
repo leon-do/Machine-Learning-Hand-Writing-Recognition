@@ -17,7 +17,7 @@ function myCtrl($http){
                 method:'GET',
                 url: 'http://localhost:8000/base64toImg'
             }).then(function(response){
-                vm.base64toImg = response
+                vm.base64toImg = response.data.base64
             });
 
 
@@ -70,7 +70,7 @@ function myCtrl($http){
                 method:'GET',
                 url: 'http://localhost:8000/getAnswer/answer'
             }).then(function(response){
-                vm.answer = response
+                vm.answer = response.data
             });
 
 

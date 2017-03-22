@@ -22,191 +22,187 @@ app.post('/api/base64', function (req, res){
     //console.log(req.body)
     var base64Data = req.body;
     //send base64 to base64img.js
-    base64toImg(base64Data, function () {
-        res.end();
-    });
-})
-
-
-app.listen(8000)
+    base64toImg(base64Data)
 
 
 
 
+    function base64toImg (base64Data){
+        console.log('\n\n\n BASE64 TO IMG')
+        console.log(base64Data)
+        app.get('/base64toImg', function (req, res) {res.send(base64Data)})
 
 
+        //creates image from base64. saves it in img/screenshot.png
+        base64Img.imgSync(base64Data.base64, './server/img', 'screenshotFull')
+        resizeImage()
 
-
-
-function base64toImg (base64Data, cb){
-    console.log('\n\n\n BASE64 TO IMG')
-    console.log(base64Data)
-    app.get('/base64toImg', function (req, res) {res.send(base64Data)})
-    cb();
-
-
-    //creates image from base64. saves it in img/screenshot.png
-    base64Img.imgSync(base64Data.base64, './server/img', 'screenshotFull')
-    resizeImage()
-
-}
+    }
 
 
 
 
 
-function resizeImage(){
-    // open a file called "screenshot.png"
-    Jimp.read(__dirname + '/server/img/screenshotFull.png', function (err, image) {
-        console.log("\n\n\n\n\n" + __dirname + "\n\n\n\n\n")
-        if (err) throw err;
-        image.resize(28, 28)                                         // resize image
-            .greyscale()                                            // set greyscale
-            .write(__dirname + "/server/img/screenshotMin.png", function(){ //save
-                flattenImg()  
-            });
-    })
-}
+    function resizeImage(){
+        // open a file called "screenshot.png"
+        Jimp.read(__dirname + '/server/img/screenshotFull.png', function (err, image) {
+            console.log("\n\n\n\n\n" + __dirname + "\n\n\n\n\n")
+            if (err) throw err;
+            image.resize(28, 28)                                         // resize image
+                .greyscale()                                            // set greyscale
+                .write(__dirname + "/server/img/screenshotMin.png", function(){ //save
+                    flattenImg()  
+                });
+        })
+    }
 
 
 
-function flattenImg(){
-    getPixels('./server/img/screenshotMin.png', function(err, pixels){
+    function flattenImg(){
+        getPixels('./server/img/screenshotMin.png', function(err, pixels){
 
-        var binaryArray = [];
-        //convert to 1 and 0
-        for (var i = 3; i < pixels.data.length; i=i+4){
-            if (pixels.data[i] === 0){
-                binaryArray.push(0)
-            } else {
-                binaryArray.push(1)
+            var binaryArray = [];
+            //convert to 1 and 0
+            for (var i = 3; i < pixels.data.length; i=i+4){
+                if (pixels.data[i] === 0){
+                    binaryArray.push(0)
+                } else {
+                    binaryArray.push(1)
+                }
+            }
+
+            console.log("\n\n\n FLATTEN IMG")
+            console.log(binaryArray)
+            app.get('/flattenImg', function (req, res) {res.send(binaryArray)})
+            cropArray(binaryArray)
+        }) 
+    }
+
+
+
+
+
+    function cropArray(arr){
+        console.log("\n\n\n CROP ARRAY")
+        console.log(arr)
+        app.get('/cropArray', function (req, res) {res.send(arr)})
+
+        //put the 0's at the tail end
+        for (var i = 1; i < arr.length; i++){
+            if (arr[i] === 1){
+                var top = Math.floor(i / 28) * 28;
+                break;
             }
         }
 
-        console.log("\n\n\n FLATTEN IMG")
-        console.log(binaryArray)
-        app.get('/flattenImg', function (req, res) {res.send(binaryArray)})
-        cropArray(binaryArray)
-    }) 
-}
+        var midArr = arr.slice(1,top) //2,3,4
+        var tailArr = arr.slice(top, arr.length) //5,6,7,8,9,10
+        //swap the tail and mid arrays. keep index 0 the same
+        var flatArray = [arr[0]].concat(tailArr).concat(midArr) // [ 1, 5, 6, 7, 8, 9, 10, 2, 3, 4 ]
+        
+        //flat array is the text array after being cropped
+        queryMongo(flatArray)
+    }
 
 
 
 
 
-function cropArray(arr){
-    console.log("\n\n\n CROP ARRAY")
-    console.log(arr)
-    app.get('/cropArray', function (req, res) {res.send(arr)})
+    function queryMongo(testArr){
+        MongoClient.connect('mongodb://localhost:27017/testdb', function(err, db) {
+            // Find some documents 
+            db.collection('machinelearnings').find({}).toArray(function(err, docs) {
+                getAnswer(testArr,docs)
+            })
+        });
+    }
 
-    //put the 0's at the tail end
-    for (var i = 1; i < arr.length; i++){
-        if (arr[i] === 1){
-            var top = Math.floor(i / 28) * 28;
-            break;
+
+
+
+
+
+
+    function getAnswer(testArr, controlArr){
+
+        //controlArr is the from the db
+        //testArr is what the user inputs in
+
+        //create an arr to store distance
+        var distanceArr = [];
+
+
+        for (var i in controlArr){
+            var distance = euclideanDistance(controlArr[i].arr, testArr)
+            distanceArr.push(distance)
         }
-    }
-
-    var midArr = arr.slice(1,top) //2,3,4
-    var tailArr = arr.slice(top, arr.length) //5,6,7,8,9,10
-    //swap the tail and mid arrays. keep index 0 the same
-    var flatArray = [arr[0]].concat(tailArr).concat(midArr) // [ 1, 5, 6, 7, 8, 9, 10, 2, 3, 4 ]
-    
-    //flat array is the text array after being cropped
-    queryMongo(flatArray)
-}
 
 
 
 
 
-function queryMongo(testArr){
-    MongoClient.connect('mongodb://localhost:27017/testdb', function(err, db) {
-        // Find some documents 
-        db.collection('machinelearnings').find({}).toArray(function(err, docs) {
-            getAnswer(testArr,docs)
-        })
-    });
-}
+        //list if distances
+        console.log('\n\n DISTANCE ARRAY')
+        console.log(distanceArr)
+        app.get('/getAnswer/distanceArr', function (req, res) {res.send(distanceArr)})
 
 
+        //find the index of the smallest distance
+        var shortestDistanceIndex = distanceArr.indexOf(Math.min.apply(Math,distanceArr))
 
 
+        //displays flatArray (user array) on console
+        console.log('\n\n TEST VISUAL')
+        visual(testArr, 'Test')
 
 
+        //display Control Image
+        console.log('\n\n CONTROL VISUAL')
+        visual(controlArr[shortestDistanceIndex].arr, 'Control')
 
-function getAnswer(testArr, controlArr){
+        //answer
+        console.log(`Answer: ${controlArr[shortestDistanceIndex].answer}`)
+        app.get('/getAnswer/Answer', function (req, res) {res.send(JSON.stringify(controlArr[shortestDistanceIndex].answer))})
 
-    //controlArr is the from the db
-    //testArr is what the user inputs in
-
-    //create an arr to store distance
-    var distanceArr = [];
-
-
-    for (var i in controlArr){
-        var distance = euclideanDistance(controlArr[i].arr, testArr)
-        distanceArr.push(distance)
     }
 
 
 
 
 
-    //list if distances
-    console.log('\n\n DISTANCE ARRAY')
-    console.log(distanceArr)
-    app.get('/getAnswer/distanceArr', function (req, res) {res.send(distanceArr)})
-
-
-    //find the index of the smallest distance
-    var shortestDistanceIndex = distanceArr.indexOf(Math.min.apply(Math,distanceArr))
-
-
-    //displays flatArray (user array) on console
-    console.log('\n\n TEST VISUAL')
-    visual(testArr, 'Test')
-
-
-    //display Control Image
-    console.log('\n\n CONTROL VISUAL')
-    visual(controlArr[shortestDistanceIndex].arr, 'Control')
-
-    //answer
-    console.log(`Answer: ${controlArr[shortestDistanceIndex].answer}`)
-    app.get('/getAnswer/Answer', function (req, res) {res.send(JSON.stringify(controlArr[shortestDistanceIndex].answer))})
-
-}
 
 
 
 
+    function euclideanDistance(arr1, arr2){
+        var answer = Math.pow(arr2.map(function(a,i){ 
+            return Math.pow(arr1[i] - arr2[i], 2);
+        }).reduce(function(a,b){
+            return a+b;
+        }),0.5)
 
-
-
-
-
-function euclideanDistance(arr1, arr2){
-    var answer = Math.pow(arr2.map(function(a,i){ 
-        return Math.pow(arr1[i] - arr2[i], 2);
-    }).reduce(function(a,b){
-        return a+b;
-    }),0.5)
-
-    return answer;
-}
-
-
-
-
-function visual(arr, name){
-    // see image on console as 1 and 0's
-    var string = '';
-    for (var i = 0; i < arr.length; i=i+28){
-        console.log(`${arr[i+0]} ${arr[i+1]} ${arr[i+2]} ${arr[i+3]} ${arr[i+4]} ${arr[i+5]} ${arr[i+6]} ${arr[i+7]} ${arr[i+8]} ${arr[i+9]} ${arr[i+10]} ${arr[i+11]} ${arr[i+12]} ${arr[i+13]} ${arr[i+14]} ${arr[i+15]} ${arr[i+16]} ${arr[i+17]} ${arr[i+18]} ${arr[i+19]} ${arr[i+20]} ${arr[i+21]} ${arr[i+22]} ${arr[i+23]} ${arr[i+24]} ${arr[i+25]} ${arr[i+26]} ${arr[i+27]}`)
-        string = string + `${arr[i+0]} ${arr[i+1]} ${arr[i+2]} ${arr[i+3]} ${arr[i+4]} ${arr[i+5]} ${arr[i+6]} ${arr[i+7]} ${arr[i+8]} ${arr[i+9]} ${arr[i+10]} ${arr[i+11]} ${arr[i+12]} ${arr[i+13]} ${arr[i+14]} ${arr[i+15]} ${arr[i+16]} ${arr[i+17]} ${arr[i+18]} ${arr[i+19]} ${arr[i+20]} ${arr[i+21]} ${arr[i+22]} ${arr[i+23]} ${arr[i+24]} ${arr[i+25]} ${arr[i+26]} ${arr[i+27]}` + '\n'
+        return answer;
     }
 
-    app.get('/getAnswer/' + name, function (req, res) {res.send(string)})
 
-}
+
+
+    function visual(arr, name){
+        // see image on console as 1 and 0's
+        var string = '';
+        for (var i = 0; i < arr.length; i=i+28){
+            console.log(`${arr[i+0]} ${arr[i+1]} ${arr[i+2]} ${arr[i+3]} ${arr[i+4]} ${arr[i+5]} ${arr[i+6]} ${arr[i+7]} ${arr[i+8]} ${arr[i+9]} ${arr[i+10]} ${arr[i+11]} ${arr[i+12]} ${arr[i+13]} ${arr[i+14]} ${arr[i+15]} ${arr[i+16]} ${arr[i+17]} ${arr[i+18]} ${arr[i+19]} ${arr[i+20]} ${arr[i+21]} ${arr[i+22]} ${arr[i+23]} ${arr[i+24]} ${arr[i+25]} ${arr[i+26]} ${arr[i+27]}`)
+            string = string + `${arr[i+0]} ${arr[i+1]} ${arr[i+2]} ${arr[i+3]} ${arr[i+4]} ${arr[i+5]} ${arr[i+6]} ${arr[i+7]} ${arr[i+8]} ${arr[i+9]} ${arr[i+10]} ${arr[i+11]} ${arr[i+12]} ${arr[i+13]} ${arr[i+14]} ${arr[i+15]} ${arr[i+16]} ${arr[i+17]} ${arr[i+18]} ${arr[i+19]} ${arr[i+20]} ${arr[i+21]} ${arr[i+22]} ${arr[i+23]} ${arr[i+24]} ${arr[i+25]} ${arr[i+26]} ${arr[i+27]}` + '\n'
+        }
+
+        app.get('/getAnswer/' + name, function (req, res) {res.send(string)})
+            res.end();
+
+    }
+
+
+});
+
+
+
+app.listen(8000)
