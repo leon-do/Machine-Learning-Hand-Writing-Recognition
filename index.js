@@ -22,8 +22,9 @@ app.post('/api/base64', function (req, res){
     //console.log(req.body)
     var base64Data = req.body;
     //send base64 to base64img.js
-    base64toImg(base64Data);
-    res.end();
+    base64toImg(base64Data, function () {
+        res.end();
+    });
 })
 
 
@@ -37,14 +38,17 @@ app.listen(8000)
 
 
 
-function base64toImg (base64Data){
+function base64toImg (base64Data, cb){
     console.log('\n\n\n BASE64 TO IMG')
     console.log(base64Data)
     app.get('/base64toImg', function (req, res) {res.send(base64Data)})
+    cb();
+
 
     //creates image from base64. saves it in img/screenshot.png
     base64Img.imgSync(base64Data.base64, './server/img', 'screenshotFull')
     resizeImage()
+
 }
 
 
@@ -203,6 +207,6 @@ function visual(arr, name){
         string = string + `${arr[i+0]} ${arr[i+1]} ${arr[i+2]} ${arr[i+3]} ${arr[i+4]} ${arr[i+5]} ${arr[i+6]} ${arr[i+7]} ${arr[i+8]} ${arr[i+9]} ${arr[i+10]} ${arr[i+11]} ${arr[i+12]} ${arr[i+13]} ${arr[i+14]} ${arr[i+15]} ${arr[i+16]} ${arr[i+17]} ${arr[i+18]} ${arr[i+19]} ${arr[i+20]} ${arr[i+21]} ${arr[i+22]} ${arr[i+23]} ${arr[i+24]} ${arr[i+25]} ${arr[i+26]} ${arr[i+27]}` + '\n'
     }
 
-    app.get('/getAnswer/' + name, function (req, res) {res.send("<pre>" + string + "</pre>")})
+    app.get('/getAnswer/' + name, function (req, res) {res.send(string)})
 
 }

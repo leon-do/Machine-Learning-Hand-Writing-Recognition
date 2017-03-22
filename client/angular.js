@@ -17,7 +17,7 @@ function myCtrl($http){
                 method:'GET',
                 url: 'http://localhost:8000/base64toImg'
             }).then(function(response){
-                vm.base64 = response
+                vm.base64toImg = response
             });
 
 
