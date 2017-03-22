@@ -23,6 +23,7 @@ app.post('/api/base64', function (req, res){
     var base64Data = req.body;
     //send base64 to base64img.js
     base64toImg(base64Data);
+    res.end();
 })
 
 

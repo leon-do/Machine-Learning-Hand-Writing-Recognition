@@ -81,9 +81,9 @@ function cropArray(arr){
 
 
 function queryMongo(testArr){
-    MongoClient.connect('mongodb://localhost:27017/testdb', function(err, db) {
+    MongoClient.connect('mongodb://mlab-leon:passwund@ds137360.mlab.com:37360/mlab-leon-db', function(err, db) {
         // Find some documents 
-        db.collection('machinelearnings').find({}).toArray(function(err, docs) {
+        db.collection('machineLearningCollection').find({}).toArray(function(err, docs) {
             getAnswer(testArr,docs)
         })
     });
