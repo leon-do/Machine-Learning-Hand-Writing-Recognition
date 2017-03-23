@@ -5,6 +5,7 @@ angular
 
 function myCtrl($http){
     var vm = this;
+
     vm.postBase64 = function(){
         //base64 is the long string
         var base64 = canvas.toDataURL()
@@ -17,34 +18,24 @@ function myCtrl($http){
                 method:'GET',
                 url: 'http://localhost:8000/base64toImg'
             }).then(function(response){
-                vm.base64toImg = response.data.base64
+                vm.base64toImg = response.data
             });
 
-
-            //get flattenImg
+            //get test data
             $http({
                 method:'GET',
-                url: 'http://localhost:8000/flattenImg'
+                url: 'http://localhost:8000/getAnswer/test'
             }).then(function(response){
-                vm.flattenImg = response.data
+                vm.test = line2Grid(response.data)
             });
 
 
-            //get cropArray
-            $http({
-                method:'GET',
-                url: 'http://localhost:8000/cropArray'
-            }).then(function(response){
-                vm.cropArray = response.data
-            });
-
-
-            //get cropArray
+            //get distanceArr
             $http({
                 method:'GET',
                 url: 'http://localhost:8000/getAnswer/distanceArr'
             }).then(function(response){
-                vm.distanceArr = response.data
+                vm.distanceArr = response.data;
             });
 
 
@@ -53,17 +44,9 @@ function myCtrl($http){
                 method:'GET',
                 url: 'http://localhost:8000/getAnswer/control'
             }).then(function(response){
-                vm.control = response.data
+                vm.controlArr = line2Grid(response.data)
             });
 
-
-            //get test data
-            $http({
-                method:'GET',
-                url: 'http://localhost:8000/getAnswer/Test'
-            }).then(function(response){
-                vm.test = response.data
-            });
 
             //get answer
             $http({
@@ -83,4 +66,18 @@ function myCtrl($http){
     }
 
     
+}
+
+
+function line2Grid(arr){
+    var string = '';
+    for (var i = 0; i < arr.length; i++){
+        if (i > 0 && i % 28 === 0){
+            string = string + arr[i] + '\n';
+        } else {
+            string = string + arr[i];
+        }
+    }
+
+    return string;
 }

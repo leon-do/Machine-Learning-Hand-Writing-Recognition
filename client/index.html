@@ -9,6 +9,7 @@
 
         <canvas id="can" width="420" height="420" style="border:2px solid;"></canvas>
 
+
         <br>
         <input 
             type="button" 
@@ -23,19 +24,15 @@
             id="analyze"
             ng-click='myCtrl.postBase64()'>
 
-        <div style="word-wrap: break-word">{{myCtrl.base64toImg}}</div>
+        <div>{{myCtrl.base64toImg}}</div>
         <br>
-        <div style="word-wrap: break-word">{{myCtrl.flattenImg}}</div>
-        <br>        
-        <div style="word-wrap: break-word">{{myCtrl.cropArray}}</div>
+        <pre>{{myCtrl.test}}</pre>
         <br>
-        <div style="word-wrap: break-word">{{myCtrl.distanceArr}}</div>
+        <pre>{{myCtrl.distanceArr}}</pre>
         <br>
-        <div style="word-wrap: break-word">{{myCtrl.control}}</div>
+        <pre>{{myCtrl.controlArr}}</pre>
         <br>
-        <div style="word-wrap: break-word">{{myCtrl.test}}</div>
-        <br>
-        <div style="word-wrap: break-word">{{myCtrl.answer}}</div>
+        <pre>{{myCtrl.answer}}</pre>
 
         <script type="text/javascript" src='./canvas.js'></script>
         <script type="text/javascript" src='./angular.js'></script>
