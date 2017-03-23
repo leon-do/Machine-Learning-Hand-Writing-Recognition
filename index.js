@@ -19,6 +19,7 @@ app.use(express.static(__dirname + "/client"));
 
 //send base64
 app.post('/api/base64', function (req, res){
+
     //console.log(req.body)
     var base64Data = req.body;
     //send base64 to base64img.js
@@ -140,7 +141,7 @@ app.post('/api/base64', function (req, res){
 
 
 
-        //list if distances
+        //list of distances
         console.log('\n\n DISTANCE ARRAY')
         console.log(distanceArr)
         app.get('/getAnswer/distanceArr', function (req, res) {res.send(distanceArr)})
@@ -166,9 +167,15 @@ app.post('/api/base64', function (req, res){
 
 
 
-        res.end(); //send data back to angular
 
-    }
+
+
+        res.end(); //send data back to angular
+        
+
+
+
+    }//get answers
 
 
 

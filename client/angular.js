@@ -4,9 +4,12 @@ angular
 
 
 function myCtrl($http){
+
+
     var vm = this;
 
     vm.postBase64 = function(){
+
         //base64 is the long string
         var base64 = canvas.toDataURL()
         //post it
