@@ -17,8 +17,14 @@ app.use(bodyParser.json({ type: "application/vnd.api+json" }));
 
 app.use(express.static(__dirname + "/client"));
 
+
+
+
+
 //send base64
 app.post('/api/base64', function (req, res){
+
+
 
     //console.log(req.body)
     var base64Data = req.body;
@@ -30,7 +36,7 @@ app.post('/api/base64', function (req, res){
 
     function base64toImg (base64Data){
         console.log('\n\n\n BASE64 TO IMG')
-        console.log(base64Data)
+        console.log(shitty)
         app.get('/base64toImg', function (req, res) {res.send(base64Data)})
 
 
