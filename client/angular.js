@@ -19,7 +19,7 @@ function myCtrl($http){
             //get base64 string
             $http({
                 method:'GET',
-                url: 'http://localhost:8000/base64toImg'
+                url: '/base64toImg'
             }).then(function(response){
                 vm.base64toImg = response.data
             });
@@ -27,7 +27,7 @@ function myCtrl($http){
             //get test data
             $http({
                 method:'GET',
-                url: 'http://localhost:8000/getAnswer/test'
+                url: '/getAnswer/test'
             }).then(function(response){
                 vm.test = line2Grid(response.data)
             });
@@ -36,7 +36,7 @@ function myCtrl($http){
             //get distanceArr
             $http({
                 method:'GET',
-                url: 'http://localhost:8000/getAnswer/distanceArr'
+                url: '/getAnswer/distanceArr'
             }).then(function(response){
                 vm.distanceArr = response.data;
             });
@@ -45,7 +45,7 @@ function myCtrl($http){
             //get best match test data control
             $http({
                 method:'GET',
-                url: 'http://localhost:8000/getAnswer/control'
+                url: '/getAnswer/control'
             }).then(function(response){
                 vm.controlArr = line2Grid(response.data)
             });
@@ -54,7 +54,7 @@ function myCtrl($http){
             //get answer
             $http({
                 method:'GET',
-                url: 'http://localhost:8000/getAnswer/answer'
+                url: '/getAnswer/answer'
             }).then(function(response){
                 vm.answer = response.data
             });
