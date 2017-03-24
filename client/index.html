@@ -5,10 +5,14 @@
 </head>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js'></script> 
 
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
 <body ng-app='myApp' ng-controller='myCtrl as myCtrl' >
 
         <canvas id="can" width="420" height="420" style="border:2px solid;"></canvas>
-
 
 
         <br>
@@ -27,11 +31,11 @@
 
 
 
-        <pre id='base64Data'></pre>
-        <pre id='test'></pre>
-        <pre id='distanceArr'></pre>
-        <pre id='control'></pre>
-        <pre id='answer'></pre>
+        <pre><code id='base64Data'></code></pre>
+        <pre><code id='test'></code></pre>
+        <pre><code id='distanceArr'></code></pre>
+        <pre><code id='control'></code></pre>
+        <pre><code id='answer'></code></pre>
 
 
 
