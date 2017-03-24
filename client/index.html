@@ -10,6 +10,7 @@
         <canvas id="can" width="420" height="420" style="border:2px solid;"></canvas>
 
 
+
         <br>
         <input 
             type="button" 
@@ -24,18 +25,75 @@
             id="analyze"
             ng-click='myCtrl.postBase64()'>
 
-        <pre>{{myCtrl.base64toImg}}</pre>
-        <br>
-        <pre>{{myCtrl.test}}</pre>
-        <br>
-        <pre>{{myCtrl.distanceArr}}</pre>
-        <br>
-        <pre>{{myCtrl.controlArr}}</pre>
-        <br>
-        <pre>{{myCtrl.answer}}</pre>
+
+
+        <pre id='base64Data'></pre>
+        <pre id='test'></pre>
+        <pre id='distanceArr'></pre>
+        <pre id='control'></pre>
+        <pre id='answer'></pre>
+
+
+
+
 
         <script type="text/javascript" src='./canvas.js'></script>
         <script type="text/javascript" src='./angular.js'></script>
+
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+
+            /*
+            Socket names
+                base64Data
+                getAnswer/test
+                getAnswer/distanceArr
+                getAnswer/control
+                getAnswer/answer
+            */
+            // emits connection event to server
+            var socket = io();
+
+            //recieve from app.js
+            socket.on('base64Data', function (data) {
+                document.getElementById('base64Data').innerHTML = data.key;
+            })
+
+            socket.on('getAnswer/test', function (data) {
+                var dataGrid = line2Grid(data.key)
+                document.getElementById('test').innerHTML = dataGrid;
+            })
+
+            socket.on('getAnswer/distanceArr', function (data) {
+                document.getElementById('distanceArr').innerHTML = data.key;
+            })
+
+            socket.on('getAnswer/control', function (data) {
+                var dataGrid = line2Grid(data.key)
+                document.getElementById('control').innerHTML = dataGrid;
+            })       
+
+            socket.on('getAnswer/answer', function (data) {
+                document.getElementById('answer').innerHTML = data.key;
+            })           
+
+
+
+
+            function line2Grid(arr){
+                var string = '';
+                for (var i = 0; i < arr.length; i++){
+                    if (i > 0 && i % 28 === 0){
+                        string = string + arr[i] + '\n';
+                    } else {
+                        string = string + arr[i];
+                    }
+                }
+
+                return string;
+            }         
+        </script>
 
 </body>
 </html>

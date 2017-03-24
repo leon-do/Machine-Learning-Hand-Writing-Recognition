@@ -10,6 +10,21 @@ var fs = require('fs')
 
 
 
+
+
+// SOCKET MAKING GLOBAL
+var io = require('socket.io')(app.listen(8000))
+var clientSocket;
+io.on('connection', function (client) {
+    clientSocket = client;
+})
+
+
+
+
+
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.text());
 app.use(bodyParser.urlencoded ({ extended:true }));
@@ -26,6 +41,8 @@ app.post('/api/base64', function (req, res){
 
 
 
+
+
     //console.log(req.body)
     var base64Data = req.body;
     //send base64 to base64img.js
@@ -36,9 +53,7 @@ app.post('/api/base64', function (req, res){
 
     function base64toImg (base64Data){
         console.log('\n\n\n BASE64 TO IMG')
-        console.log(shitty)
-        app.get('/base64toImg', function (req, res) {res.send(base64Data)})
-
+        clientSocket.emit('base64Data', { key: base64Data.base64 })
 
         //creates image from base64. saves it in img/screenshot.png
         base64Img.imgSync(base64Data.base64, './server/img', 'screenshotFull')
@@ -91,7 +106,8 @@ app.post('/api/base64', function (req, res){
     function cropArray(arr){
         console.log("\n\n\n CROP ARRAY")
         console.log(arr)
-        app.get('/cropArray', function (req, res) {res.send(arr)})
+        //app.get('/cropArray', function (req, res) {res.send(arr)})
+        clientSocket.emit('cropArray', { key: arr })
 
         //put the 0's at the tail end
         for (var i = 1; i < arr.length; i++){
@@ -150,7 +166,8 @@ app.post('/api/base64', function (req, res){
         //list of distances
         console.log('\n\n DISTANCE ARRAY')
         console.log(distanceArr)
-        app.get('/getAnswer/distanceArr', function (req, res) {res.send(distanceArr)})
+        //app.get('/getAnswer/distanceArr', function (req, res) {res.send(distanceArr)})
+        clientSocket.emit('getAnswer/distanceArr', { key: distanceArr })
 
 
         //find the index of the smallest distance
@@ -159,19 +176,20 @@ app.post('/api/base64', function (req, res){
 
         //displays flatArray (user array) on console
         console.log('\n\n TEST VISUAL')
-        app.get('/getAnswer/test', function (req, res) {res.send(testArr)})
+        //app.get('/getAnswer/test', function (req, res) {res.send(testArr)})
+        clientSocket.emit('getAnswer/test', { key: testArr })
 
 
         //display Control Image
         console.log('\n\n CONTROL VISUAL')
-        app.get('/getAnswer/control', function (req, res) {res.send(controlArr[shortestDistanceIndex].arr)})
+        //app.get('/getAnswer/control', function (req, res) {res.send(controlArr[shortestDistanceIndex].arr)})
+        clientSocket.emit('getAnswer/control', { key: controlArr[shortestDistanceIndex].arr })
 
 
         //answer
         console.log(`Answer: ${controlArr[shortestDistanceIndex].answer}`)
-        app.get('/getAnswer/Answer', function (req, res) {res.send(JSON.stringify(controlArr[shortestDistanceIndex].answer))})
-
-
+        //app.get('/getAnswer/Answer', function (req, res) {res.send(JSON.stringify(controlArr[shortestDistanceIndex].answer))})
+        clientSocket.emit('getAnswer/answer', { key: JSON.stringify(controlArr[shortestDistanceIndex].answer) })
 
 
 
@@ -212,6 +230,3 @@ app.post('/api/base64', function (req, res){
 
 });
 
-
-
-app.listen(8000)
