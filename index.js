@@ -95,6 +95,7 @@ app.post('/api/base64', function (req, res){
 
             console.log("\n\n\n FLATTEN IMG")
             console.log(binaryArray)
+            visual(binaryArray)
             cropArray(binaryArray)
         }) 
     }
@@ -176,13 +177,13 @@ app.post('/api/base64', function (req, res){
 
         //displays flatArray (user array) on console
         console.log('\n\n TEST VISUAL')
-        //app.get('/getAnswer/test', function (req, res) {res.send(testArr)})
+        visual(testArr)
         clientSocket.emit('getAnswer/test', { key: testArr })
 
 
         //display Control Image
         console.log('\n\n CONTROL VISUAL')
-        //app.get('/getAnswer/control', function (req, res) {res.send(controlArr[shortestDistanceIndex].arr)})
+        visual(controlArr[shortestDistanceIndex].arr)
         clientSocket.emit('getAnswer/control', { key: controlArr[shortestDistanceIndex].arr })
 
 
@@ -229,4 +230,16 @@ app.post('/api/base64', function (req, res){
 
 
 });
+
+
+
+
+function visual(arr){
+    // see image on console as 1 and 0's
+    var string = '';
+    for (var i = 0; i < arr.length; i=i+28){
+        console.log(`${arr[i+0]} ${arr[i+1]} ${arr[i+2]} ${arr[i+3]} ${arr[i+4]} ${arr[i+5]} ${arr[i+6]} ${arr[i+7]} ${arr[i+8]} ${arr[i+9]} ${arr[i+10]} ${arr[i+11]} ${arr[i+12]} ${arr[i+13]} ${arr[i+14]} ${arr[i+15]} ${arr[i+16]} ${arr[i+17]} ${arr[i+18]} ${arr[i+19]} ${arr[i+20]} ${arr[i+21]} ${arr[i+22]} ${arr[i+23]} ${arr[i+24]} ${arr[i+25]} ${arr[i+26]} ${arr[i+27]}`)
+        string = string + `${arr[i+0]} ${arr[i+1]} ${arr[i+2]} ${arr[i+3]} ${arr[i+4]} ${arr[i+5]} ${arr[i+6]} ${arr[i+7]} ${arr[i+8]} ${arr[i+9]} ${arr[i+10]} ${arr[i+11]} ${arr[i+12]} ${arr[i+13]} ${arr[i+14]} ${arr[i+15]} ${arr[i+16]} ${arr[i+17]} ${arr[i+18]} ${arr[i+19]} ${arr[i+20]} ${arr[i+21]} ${arr[i+22]} ${arr[i+23]} ${arr[i+24]} ${arr[i+25]} ${arr[i+26]} ${arr[i+27]}` + '\n'
+    }
+}
 
