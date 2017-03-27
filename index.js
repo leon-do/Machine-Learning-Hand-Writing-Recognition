@@ -132,12 +132,26 @@ app.post('/api/base64', function (req, res){
 
 
     function queryMongo(testArr){
-        MongoClient.connect('mongodb://localhost:27017/testdb', function(err, db) {
-            // Find some documents 
-            db.collection('machinelearnings').find({}).toArray(function(err, docs) {
-                getAnswer(testArr,docs)
+
+        //connect online
+        MongoClient.connect('mongodb://ds137360.mlab.com:37360/mlab-leon-db', function(err, db) {
+            db.authenticate('mlab-leon', 'passwund', function(){
+                // Find some documents 
+                db.collection('machinelearnings').find({}).toArray(function(err, docs) {
+                    getAnswer(testArr,docs)
+                })
             })
+
         });
+
+        //connect locally
+        // MongoClient.connect('mongodb://localhost:27017/testdb', function(err, db) {
+        //     // Find some documents
+        //     db.collection('machinelearnings').find({}).toArray(function(err, docs) {
+        //         getAnswer(testArr,docs)
+        //     })
+        // });
+
     }
 
 
