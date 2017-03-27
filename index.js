@@ -13,7 +13,7 @@ var fs = require('fs')
 
 
 // SOCKET MAKING GLOBAL
-var io = require('socket.io')(app.listen(8000))
+var io = require('socket.io')(app.listen(process.env.PORT || 8000))
 var clientSocket;
 io.on('connection', function (client) {
     clientSocket = client;
