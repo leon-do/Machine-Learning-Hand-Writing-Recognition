@@ -57,5 +57,14 @@ For n dimensions, distance can be calculated as shown in Figure 8. The Euclidean
         }),0.5)
         return answer;
     }
+    
+
+The euclidean distances are stored into an array called distanceArr. According to the k-nearest neighbors algorithm, the best match is one with the shortest distance (or smallest value) in distanceArr. The javascript snippet is:
+
+    // returns the index of the smallest number
+    var shortestDistanceIndex = distanceArr.indexOf(Math.min.apply(Math,distanceArr))
+    
+The index is then matched with the database index to find the predicted answer.
+
 
 
