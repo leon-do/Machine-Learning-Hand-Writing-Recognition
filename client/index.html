@@ -4,7 +4,7 @@
     <title></title>
 </head>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js'></script> 
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/styles/default.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
@@ -12,19 +12,29 @@
 
 <body ng-app='myApp' ng-controller='myCtrl as myCtrl' >
 
+    <div class='container'>
+
+        <h5><code>Machine Learning: Handwritten Digital Recognition Using a Simplified
+K-Nearest Neighbors Algorithm in Javascript.</code></h5>
+
+        <pre> Leon Do </pre>
+
+        <pre> Instructions: Draw a number between 0 and 9 and click analyze </pre>
+
         <canvas id="can" width="420" height="420" style="border:2px solid;"></canvas>
 
 
         <br>
         <input 
-            type="button" 
+            type="button"
+            class="waves-effect waves-light blue-grey lighten-1 btn"             
             value="clear" 
             id="clr"
             ng-click='myCtrl.clrCanvas()'>
 
-        <br>
         <input 
             type="button" 
+            class="waves-effect waves-light blue-grey lighten-1 btn"
             value="analyze" 
             id="analyze"
             ng-click='myCtrl.postBase64()'>
@@ -38,8 +48,9 @@
         <pre>Prediction<code id='answer'> &nbsp; </code></pre>
 
 
+        <object width="800px" height="3150px" data="../Explanation/ppr.pdf"></object>
 
-
+    </div>
 
         <script type="text/javascript" src='./canvas.js'></script>
         <script type="text/javascript" src='./angular.js'></script>
