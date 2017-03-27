@@ -66,5 +66,5 @@ The euclidean distances are stored into an array called distanceArr. According t
     
 The index is then matched with the database index to find the predicted answer.
 
-
+"THE MNIST DATABASE." MNIST Handwritten Digit Database, Yann LeCun, Corinna Cortes and Chris Burges. N.p., n.d. Web. 27 Mar. 2017.
 
