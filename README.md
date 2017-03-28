@@ -3,6 +3,6 @@
 ![alt tag](./img/demo.png)
 
 
-![alt tag](./Explanation/ppr/ppr1.jpg)
-![alt tag](./Explanation/ppr/ppr2.jpg)
-![alt tag](./Explanation/ppr/ppr3.jpg)
+![alt tag](./Explanation/ppr/ppr-1.png)
+![alt tag](./Explanation/ppr/ppr-2.png)
+![alt tag](./Explanation/ppr/ppr-3.png)
