@@ -3,4 +3,4 @@
 ![alt tag](./img/demo.png)
 
 
-![alt tag](./Explanation/ppr.pdf)
+![alt tag](./Explanation/ppr.png)
